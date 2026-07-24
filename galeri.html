@@ -105,29 +105,16 @@
     <button class="nav-btn next"><i class="fas fa-chevron-right"></i></button>
   </div>
 
+  <script src="js/data.js"></script>
   <script src="js/script.js"></script>
   <script>
-    const galleryImages = [
-      "https://images.unsplash.com/photo-1580809361436-42a7ec204889?w=800&q=80",
-      "https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?w=800&q=80",
-      "https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?w=800&q=80",
-      "https://images.unsplash.com/photo-1514306191717-452ec28c7814?w=800&q=80",
-      "https://images.unsplash.com/photo-1460723237483-7a6dc9d0b212?w=800&q=80",
-      "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800&q=80",
-      "https://images.unsplash.com/photo-1598387993441-a364f854c3e1?w=800&q=80",
-      "https://images.unsplash.com/photo-1516307365426-bea591f05011?w=800&q=80",
-      "https://images.unsplash.com/photo-1503095396549-807759245b35?w=800&q=80"
-    ];
-
-    const grid = document.getElementById('gallery-full');
-    if (grid) {
-      grid.innerHTML = galleryImages.map(img => `
-        <div class="gallery-item fade-in">
-          <img src="${img}" alt="Galeri">
-          <div class="overlay"><i class="fas fa-expand"></i></div>
-        </div>
-      `).join('');
-    }
+    (async () => {
+      const gallery = await fetchData('gallery.json');
+      const grid = document.getElementById('gallery-full');
+      if (grid && gallery && gallery.length) {
+        grid.innerHTML = gallery.map(galleryItemHTML).join('');
+      }
+    })();
   </script>
 </body>
 </html>

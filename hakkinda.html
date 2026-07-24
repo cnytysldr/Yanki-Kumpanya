@@ -66,11 +66,11 @@
       <div class="about-grid fade-in">
         <div class="text">
           <h3 style="color:#FFD700;margin-bottom:15px">Misyonumuz</h3>
-          <p>Toplumun kültürel gelişimine katkıda bulunmak, tiyatro sanatını herkes için erişilebilir kılmak ve gelecek nesil tiyatroculara ilham vermektir.</p>
+          <p id="hakkinda-mission">Toplumun kültürel gelişimine katkıda bulunmak, tiyatro sanatını herkes için erişilebilir kılmak ve gelecek nesil tiyatroculara ilham vermektir.</p>
         </div>
         <div class="text">
           <h3 style="color:#FFD700;margin-bottom:15px">Vizyonumuz</h3>
-          <p>Türkiye'nin önde gelen bağımsız tiyatro topluluklarından biri olarak, uluslararası festivallerde temsil edilen, yenilikçi ve sürdürülebilir bir sanat markası olmak.</p>
+          <p id="hakkinda-vision">Türkiye'nin önde gelen bağımsız tiyatro topluluklarından biri olarak, uluslararası festivallerde temsil edilen, yenilikçi ve sürdürülebilir bir sanat markası olmak.</p>
         </div>
       </div>
     </div>
@@ -156,6 +156,51 @@
 
   <button class="scroll-top"><i class="fas fa-chevron-up"></i></button>
 
+  <script src="js/data.js"></script>
   <script src="js/script.js"></script>
+  <script>
+    (async () => {
+      const about = await fetchData('about.json');
+      if (!about) return;
+
+      // Story
+      if (about.title) document.querySelector('.about-grid .text h2').textContent = about.title;
+      const paragraphs = document.querySelectorAll('.about-grid .text p');
+      if (about.p1 && paragraphs[0]) paragraphs[0].textContent = about.p1;
+      if (about.p2 && paragraphs[1]) paragraphs[1].textContent = about.p2;
+      if (about.image) document.querySelector('.about-grid .img-wrap img').src = about.image;
+
+      // Stats
+      if (about.stats) {
+        const statItems = document.querySelectorAll('.stat-item');
+        about.stats.forEach((s, i) => {
+          if (statItems[i]) {
+            statItems[i].querySelector('h3').textContent = s.value || '';
+            statItems[i].querySelector('p').textContent = s.label || '';
+          }
+        });
+      }
+
+      // Mission & Vision
+      const missionBox = document.querySelector('#hakkinda-mission');
+      const visionBox = document.querySelector('#hakkinda-vision');
+      if (about.mission && missionBox) missionBox.textContent = about.mission;
+      if (about.vision && visionBox) visionBox.textContent = about.vision;
+
+      // Team
+      if (about.team && about.team.length) {
+        const teamGrid = document.querySelector('.team-grid');
+        if (teamGrid) {
+          teamGrid.innerHTML = about.team.map(m => `
+            <div class="team-card">
+              <img class="avatar" src="${m.img || ''}" alt="${m.name || ''}">
+              <h4>${m.name || ''}</h4>
+              <p>${m.role || ''}</p>
+            </div>
+          `).join('');
+        }
+      }
+    })();
+  </script>
 </body>
 </html>

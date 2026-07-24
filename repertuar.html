@@ -97,39 +97,34 @@
 
   <button class="scroll-top"><i class="fas fa-chevron-up"></i></button>
 
+  <script src="js/data.js"></script>
   <script src="js/script.js"></script>
   <script>
-    const allShows = [
-      { title: "Kayıp Geceler", date: "Her Cuma & Cumartesi, 20:30", desc: "İki perdelik dram. Kaybolan zamanların peşinde bir adamın hikayesi. Sahnenin karanlık köşelerinden yükselen bir yankı.", img: "https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?w=600&q=80", badge: "Yeni", status: "Sahnede" },
-      { title: "Gülme Safi", date: "Her Cumartesi, 21:00", desc: "Karanlık bir komedi. Hayatın absürtlüğünü gülerek anlatan, izleyiciyi hem güldüren hem düşündüren bir oyun.", img: "https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?w=600&q=80", badge: "Popüler", status: "Sahnede" },
-      { title: "Son Perde", date: "Her Pazar, 18:00", desc: "Bir tiyatronun kapanış gecesi. Her şey sona ererken geriye ne kalır? İki usta oyuncunun son karşılaşması.", img: "https://images.unsplash.com/photo-1514306191717-452ec28c7814?w=600&q=80", badge: "", status: "Sahnede" },
-      { title: "Sessiz Çığlık", date: "Önümüzdeki Sezon", desc: "İnsanın iç dünyasına yaptığı bir yolculuk. Sessizliğin en yüksek sesle konuştuğu bir oyun.", img: "https://images.unsplash.com/photo-1460723237483-7a6dc9d0b212?w=600&q=80", badge: "Yakında", status: "Yakında" },
-      { title: "Gece Treni", date: "Arşiv", desc: "2023 sezonunun en çok izlenen oyunu. Bir trende geçen gizemli gece.", img: "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=600&q=80", badge: "", status: "Arşiv" },
-      { title: "Aynadaki Yüz", date: "Arşiv", desc: "Kimlik arayışının sahne üzerindeki yansıması. 2022 prömiyeri.", img: "https://images.unsplash.com/photo-1598387993441-a364f854c3e1?w=600&q=80", badge: "", status: "Arşiv" }
-    ];
-
-    const grid = document.getElementById('repertuar-grid');
-    if (grid) {
-      grid.innerHTML = allShows.map(s => `
-        <div class="show-card fade-in">
-          <div class="img-wrap">
-            <img src="${s.img}" alt="${s.title}">
-            ${s.badge ? `<span class="badge">${s.badge}</span>` : ''}
-          </div>
-          <div class="info">
-            <h3>${s.title}</h3>
-            <div class="meta"><i class="fas fa-calendar-alt" style="color:#FFD700;margin-right:6px"></i>${s.date}</div>
-            <p>${s.desc}</p>
-            <div style="margin-top:12px;display:flex;align-items:center;gap:10px">
-              <span style="font-size:.75rem;padding:4px 10px;border-radius:3px;font-weight:600;text-transform:uppercase;letter-spacing:1px;
-                ${s.status === 'Sahnede' ? 'background:rgba(76,175,80,.15);color:#4CAF50' : s.status === 'Yakında' ? 'background:rgba(255,215,0,.15);color:#FFD700' : 'background:rgba(150,150,150,.15);color:#999'}">
-                ${s.status}
-              </span>
+    (async () => {
+      const shows = await fetchData('shows.json');
+      const grid = document.getElementById('repertuar-grid');
+      if (grid && shows && shows.length) {
+        grid.innerHTML = shows.map(s => `
+          <div class="show-card fade-in">
+            <div class="img-wrap">
+              <img src="${s.img || ''}" alt="${s.title || ''}">
+              ${s.badge ? `<span class="badge">${s.badge}</span>` : ''}
+            </div>
+            <div class="info">
+              <h3>${s.title || ''}</h3>
+              <div class="meta"><i class="fas fa-calendar-alt" style="color:#FFD700;margin-right:6px"></i>${s.date || ''}</div>
+              <p>${s.desc || ''}</p>
+              <div style="margin-top:12px;display:flex;align-items:center;gap:10px">
+                <span style="font-size:.75rem;padding:4px 10px;border-radius:3px;font-weight:600;text-transform:uppercase;letter-spacing:1px;
+                  ${s.status === 'Sahnede' ? 'background:rgba(76,175,80,.15);color:#4CAF50' : s.status === 'Yakında' ? 'background:rgba(255,215,0,.15);color:#FFD700' : 'background:rgba(150,150,150,.15);color:#999'}">
+                  ${s.status || ''}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
-      `).join('');
-    }
+        `).join('');
+      }
+    })();
   </script>
 </body>
 </html>

@@ -7,10 +7,8 @@ redirects = []
 [functions."*"]
 
 [build]
-publish = "C:\\Users\\CÜNEYT\\Documents\\Default Project\\yanki-kumpanya\\_site"
-publishOrigin = "ui"
-commandOrigin = "ui"
-command = "cecil build"
+publish = "C:\\Users\\CÜNEYT\\Documents\\Default Project\\yanki-kumpanya"
+publishOrigin = "default"
 
 [build.environment]
 

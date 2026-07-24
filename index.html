@@ -184,53 +184,35 @@
     <button class="nav-btn next"><i class="fas fa-chevron-right"></i></button>
   </div>
 
+  <script src="js/data.js"></script>
   <script src="js/script.js"></script>
   <script>
-    // Demo data – admin panelinden güncellenebilir
-    const defaultShows = [
-      { title: "Kayıp Geceler", date: "Her Cuma & Cumartesi", desc: "İki perdelik dram. Kaybolan zamanların peşinde bir adam.", img: "https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?w=600&q=80", badge: "Yeni" },
-      { title: "Gülme Safi", date: "Her Cumartesi", desc: "Karanlık bir komedi. Hayatın absürtlüğünü gülerek anlatan bir oyun.", img: "https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?w=600&q=80", badge: "Popüler" },
-      { title: "Son Perde", date: "Her Pazar", desc: "Bir tiyatronun kapanış gecesi. Her şey sona ererken geriye ne kalır?", img: "https://images.unsplash.com/photo-1514306191717-452ec28c7814?w=600&q=80", badge: "" }
-    ];
+    (async () => {
+      // Hero
+      const hero = await fetchData('hero.json');
+      if (hero) {
+        if (hero.image) document.querySelector('.hero-bg').src = hero.image;
+        if (hero.title) document.querySelector('.logo-hero').childNodes[0].textContent = hero.title;
+        if (hero.subtitle) document.querySelector('.logo-hero span').textContent = hero.subtitle;
+        if (hero.slogan) document.querySelector('.slogan').textContent = hero.slogan;
+        if (hero.btnText) document.querySelector('.cta-btn').textContent = hero.btnText;
+        if (hero.btnLink) document.querySelector('.cta-btn').href = hero.btnLink;
+      }
 
-    const defaultGallery = [
-      "https://images.unsplash.com/photo-1580809361436-42a7ec204889?w=600&q=80",
-      "https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?w=600&q=80",
-      "https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?w=600&q=80",
-      "https://images.unsplash.com/photo-1514306191717-452ec28c7814?w=600&q=80",
-      "https://images.unsplash.com/photo-1460723237483-7a6dc9d0b212?w=600&q=80",
-      "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=600&q=80"
-    ];
+      // Shows
+      const shows = await fetchData('shows.json');
+      const grid = document.getElementById('shows-grid');
+      if (grid && shows && shows.length) {
+        grid.innerHTML = shows.filter(s => s.status !== 'Arşiv').slice(0, 3).map(showCardHTML).join('');
+      }
 
-    // Render shows
-    const showsGrid = document.getElementById('shows-grid');
-    if (showsGrid) {
-      showsGrid.innerHTML = defaultShows.map(s => `
-        <div class="show-card fade-in">
-          <div class="img-wrap">
-            <img src="${s.img}" alt="${s.title}">
-            ${s.badge ? `<span class="badge">${s.badge}</span>` : ''}
-          </div>
-          <div class="info">
-            <h3>${s.title}</h3>
-            <div class="meta"><i class="fas fa-calendar-alt" style="color:#FFD700;margin-right:6px"></i>${s.date}</div>
-            <p>${s.desc}</p>
-            <a href="repertuar.html" class="btn-link">Detay &rarr;</a>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // Render home gallery (first 6)
-    const homeGallery = document.getElementById('home-gallery');
-    if (homeGallery) {
-      homeGallery.innerHTML = defaultGallery.slice(0, 6).map(img => `
-        <div class="gallery-item fade-in">
-          <img src="${img}" alt="Galeri">
-          <div class="overlay"><i class="fas fa-expand"></i></div>
-        </div>
-      `).join('');
-    }
+      // Gallery (first 6)
+      const gallery = await fetchData('gallery.json');
+      const gal = document.getElementById('home-gallery');
+      if (gal && gallery && gallery.length) {
+        gal.innerHTML = gallery.slice(0, 6).map(galleryItemHTML).join('');
+      }
+    })();
   </script>
 </body>
 </html>
