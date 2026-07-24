@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yankı Kumpanya – Tiyatro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Loader -->
+  <div class="loader"><div class="spinner"></div></div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <a href="index.html" class="logo">YANKI <span>KUMPANYA</span></a>
+      <nav class="nav-links">
+        <a href="index.html">Ana Sayfa</a>
+        <a href="hakkinda.html">Hakkında</a>
+        <a href="repertuar.html">Repertuar</a>
+        <a href="galeri.html">Galeri</a>
+        <a href="iletisim.html">İletişim</a>
+      </nav>
+      <div class="hamburger">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Nav -->
+  <div class="mobile-nav">
+    <button class="close-btn">&times;</button>
+    <a href="index.html">Ana Sayfa</a>
+    <a href="hakkinda.html">Hakkında</a>
+    <a href="repertuar.html">Repertuar</a>
+    <a href="galeri.html">Galeri</a>
+    <a href="iletisim.html">İletişim</a>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero" id="hero">
+    <img class="hero-bg" src="https://images.unsplash.com/photo-1503095396549-807759245b35?w=1920&q=80" alt="Sahne">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1 class="logo-hero">Yankı Kumpanya<span>İstanbul Tiyatrosu</span></h1>
+      <p class="slogan">"Sahnenin ışığı, ruhun yankısıdır."</p>
+      <a href="repertuar.html" class="cta-btn">Repertuarı Keşfet</a>
+    </div>
+  </section>
+
+  <!-- Marquee -->
+  <div class="marquee-bar">
+    <span class="marquee-text">
+      YENİ SEZON BAŞLADI &nbsp;&bull;&nbsp; BİLETLERİ HIZLA TÜKENİYOR &nbsp;&bull;&nbsp; HER CUMA & CUMARTESİ YENİ OYUN &nbsp;&bull;&nbsp; REZERVASYON İÇİN BİZİMLE İLETİŞİME GEÇİN
+    </span>
+  </div>
+
+  <!-- Hakkında (Kısa) -->
+  <section class="section" id="hakkinda">
+    <div class="container">
+      <div class="about-grid fade-in">
+        <div class="text">
+          <h2>Tiyatronun Tutkusu</h2>
+          <p>Yankı Kumpanya, 2018 yılında İstanbul'da kurulan bağımsız bir tiyatro topluluğudur. Sanatın dönüştürücü gücüne inanarak, seyirciyi hem eğlendiren hem de düşündüren oyunlar sahneliyoruz.</p>
+          <p>Modern sahne teknikleri, güçlü oyunculuk ve özgün yorumlarımızla her sezon yeni bir deneyim sunuyoruz.</p>
+          <a href="hakkinda.html" class="btn-link" style="color:#FFD700;font-weight:600;text-transform:uppercase;letter-spacing:1px;font-size:.9rem;margin-top:15px;display:inline-block">Daha Fazla &rarr;</a>
+        </div>
+        <div class="img-wrap">
+          <img src="https://images.unsplash.com/photo-1580809361436-42a7ec204889?w=800&q=80" alt="Sahne Performansı">
+        </div>
+      </div>
+      <div class="stats-row fade-in">
+        <div class="stat-item">
+          <h3>50+</h3>
+          <p>Oyun</p>
+        </div>
+        <div class="stat-item">
+          <h3>10K+</h3>
+          <p>Seyirci</p>
+        </div>
+        <div class="stat-item">
+          <h3>7</h3>
+          <p>Yıl</p>
+        </div>
+        <div class="stat-item">
+          <h3>15+</h3>
+          <p>Ödül</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Güncel Oyunlar -->
+  <section class="section" style="background:#111" id="oyunlar">
+    <div class="container">
+      <div class="section-header fade-in">
+        <h2>Güncel Oyunlar</h2>
+        <p>Bu sezon sahneye koyduğumuz oyunlar</p>
+      </div>
+      <div class="shows-grid" id="shows-grid">
+        <!-- JS ile doldurulacak -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Galeri Önizleme -->
+  <section class="section" id="galeri">
+    <div class="container">
+      <div class="section-header fade-in">
+        <h2>Galeri</h2>
+        <p>Sahneden kareler</p>
+      </div>
+      <div class="gallery-grid" id="home-gallery">
+        <!-- JS ile doldurulacak -->
+      </div>
+      <div style="text-align:center;margin-top:40px" class="fade-in">
+        <a href="galeri.html" class="cta-btn" style="border:2px solid #FFD700;color:#FFD700;padding:12px 36px;font-size:.9rem;text-transform:uppercase;letter-spacing:2px;display:inline-block">Tüm Galeri &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="logo-footer">Yankı Kumpanya</div>
+          <p>İstanbul'un bağımsız tiyatro topluluğu. 2018'den beri sahnede.</p>
+          <div class="social-row">
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+            <a href="#"><i class="fab fa-facebook"></i></a>
+          </div>
+        </div>
+        <div>
+          <h4>Sayfalar</h4>
+          <ul>
+            <li><a href="index.html">Ana Sayfa</a></li>
+            <li><a href="hakkinda.html">Hakkında</a></li>
+            <li><a href="repertuar.html">Repertuar</a></li>
+            <li><a href="galeri.html">Galeri</a></li>
+            <li><a href="iletisim.html">İletişim</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>İletişim</h4>
+          <ul>
+            <li><i class="fas fa-map-marker-alt" style="color:#FFD700;margin-right:8px"></i> Kadıköy, İstanbul</li>
+            <li><i class="fas fa-phone" style="color:#FFD700;margin-right:8px"></i> +90 216 XXX XX XX</li>
+            <li><i class="fas fa-envelope" style="color:#FFD700;margin-right:8px"></i> info@yankikumpanya.com</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Bülten</h4>
+          <p style="margin-bottom:12px">Yeni oyunlar ve etkinliklerden haberdar olun.</p>
+          <form style="display:flex;gap:0">
+            <input type="email" placeholder="E-posta adresiniz" style="flex:1;padding:10px 14px;background:#1a1a1a;border:1px solid #333;color:#e0e0e0;font-size:.85rem;border-radius:3px 0 0 3px;border-right:none">
+            <button type="button" style="background:#FFD700;color:#0d0d0d;border:none;padding:10px 18px;font-weight:700;cursor:pointer;border-radius:0 3px 3px 0;font-size:.85rem">Abone Ol</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <span class="ssl"><i class="fas fa-lock"></i></span>
+        &copy; 2026 Yankı Kumpanya. Tüm hakları saklıdır.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll to top -->
+  <button class="scroll-top"><i class="fas fa-chevron-up"></i></button>
+
+  <!-- Lightbox -->
+  <div class="lightbox">
+    <button class="close">&times;</button>
+    <button class="nav-btn prev"><i class="fas fa-chevron-left"></i></button>
+    <img src="" alt="Galeri">
+    <button class="nav-btn next"><i class="fas fa-chevron-right"></i></button>
+  </div>
+
+  <script src="js/script.js"></script>
+  <script>
+    // Demo data – admin panelinden güncellenebilir
+    const defaultShows = [
+      { title: "Kayıp Geceler", date: "Her Cuma & Cumartesi", desc: "İki perdelik dram. Kaybolan zamanların peşinde bir adam.", img: "https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?w=600&q=80", badge: "Yeni" },
+      { title: "Gülme Safi", date: "Her Cumartesi", desc: "Karanlık bir komedi. Hayatın absürtlüğünü gülerek anlatan bir oyun.", img: "https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?w=600&q=80", badge: "Popüler" },
+      { title: "Son Perde", date: "Her Pazar", desc: "Bir tiyatronun kapanış gecesi. Her şey sona ererken geriye ne kalır?", img: "https://images.unsplash.com/photo-1514306191717-452ec28c7814?w=600&q=80", badge: "" }
+    ];
+
+    const defaultGallery = [
+      "https://images.unsplash.com/photo-1580809361436-42a7ec204889?w=600&q=80",
+      "https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?w=600&q=80",
+      "https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?w=600&q=80",
+      "https://images.unsplash.com/photo-1514306191717-452ec28c7814?w=600&q=80",
+      "https://images.unsplash.com/photo-1460723237483-7a6dc9d0b212?w=600&q=80",
+      "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=600&q=80"
+    ];
+
+    // Render shows
+    const showsGrid = document.getElementById('shows-grid');
+    if (showsGrid) {
+      showsGrid.innerHTML = defaultShows.map(s => `
+        <div class="show-card fade-in">
+          <div class="img-wrap">
+            <img src="${s.img}" alt="${s.title}">
+            ${s.badge ? `<span class="badge">${s.badge}</span>` : ''}
+          </div>
+          <div class="info">
+            <h3>${s.title}</h3>
+            <div class="meta"><i class="fas fa-calendar-alt" style="color:#FFD700;margin-right:6px"></i>${s.date}</div>
+            <p>${s.desc}</p>
+            <a href="repertuar.html" class="btn-link">Detay &rarr;</a>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Render home gallery (first 6)
+    const homeGallery = document.getElementById('home-gallery');
+    if (homeGallery) {
+      homeGallery.innerHTML = defaultGallery.slice(0, 6).map(img => `
+        <div class="gallery-item fade-in">
+          <img src="${img}" alt="Galeri">
+          <div class="overlay"><i class="fas fa-expand"></i></div>
+        </div>
+      `).join('');
+    }
+  </script>
+</body>
+</html>

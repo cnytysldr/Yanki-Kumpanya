@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin – Yankı Kumpanya</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter',system-ui,sans-serif;background:#0d0d0d;color:#e0e0e0;min-height:100vh}
+    
+    /* Login */
+    .login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+    .login-box{background:#1a1a1a;padding:50px 40px;border-radius:8px;width:100%;max-width:420px;border:1px solid #333}
+    .login-box h1{font-family:'Playfair Display',serif;color:#FFD700;text-align:center;margin-bottom:8px;font-size:1.8rem}
+    .login-box .sub{text-align:center;color:#888;margin-bottom:30px;font-size:.9rem}
+    .login-box input{width:100%;padding:14px 16px;background:#0d0d0d;border:1px solid #333;color:#e0e0e0;font-size:.95rem;border-radius:4px;margin-bottom:15px}
+    .login-box input:focus{outline:none;border-color:#FFD700}
+    .login-box button{width:100%;padding:14px;background:#FFD700;color:#0d0d0d;border:none;border-radius:4px;font-weight:700;font-size:1rem;cursor:pointer;text-transform:uppercase;letter-spacing:1px}
+    .login-box button:hover{background:#e6c200}
+    .login-box .err{color:#ef5350;font-size:.85rem;text-align:center;margin-top:10px;display:none}
+    .login-box .note{color:#666;font-size:.8rem;text-align:center;margin-top:20px;line-height:1.5}
+    
+    /* Admin Layout */
+    .admin{display:none}
+    .admin.active{display:flex;min-height:100vh}
+    .sidebar{width:240px;background:#111;border-right:1px solid #222;padding:20px 0;position:fixed;top:0;left:0;height:100vh;overflow-y:auto}
+    .sidebar .logo{text-align:center;padding:0 20px 20px;border-bottom:1px solid #222;margin-bottom:10px}
+    .sidebar .logo h2{font-family:'Playfair Display',serif;color:#FFD700;font-size:1.2rem}
+    .sidebar .logo p{color:#666;font-size:.75rem}
+    .sidebar nav a{display:flex;align-items:center;gap:12px;padding:12px 24px;color:#999;font-size:.9rem;transition:.2s;border-left:3px solid transparent}
+    .sidebar nav a:hover{color:#FFD700;background:rgba(255,215,0,.05)}
+    .sidebar nav a.active{color:#FFD700;background:rgba(255,215,0,.08);border-left-color:#FFD700}
+    .sidebar nav a i{width:18px;text-align:center}
+    .sidebar .logout{display:block;margin-top:20px;padding:12px 24px;color:#ef5350;font-size:.85rem;cursor:pointer;border-top:1px solid #222;padding-top:15px}
+    
+    .main{margin-left:240px;flex:1;padding:30px 40px;min-height:100vh}
+    .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px}
+    .topbar h1{font-size:1.5rem;color:#FFD700;font-family:'Playfair Display',serif}
+    .topbar .badge{background:#FFD700;color:#0d0d0d;padding:4px 12px;border-radius:20px;font-size:.75rem;font-weight:700}
+    
+    .section{display:none}
+    .section.active{display:block}
+    
+    .card{background:#1a1a1a;border:1px solid #222;border-radius:8px;padding:25px;margin-bottom:20px}
+    .card h3{color:#FFD700;margin-bottom:15px;font-size:1.1rem;font-family:'Playfair Display',serif}
+    .card label{display:block;color:#999;font-size:.8rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;margin-top:15px}
+    .card input,.card textarea,.card select{width:100%;padding:12px 14px;background:#0d0d0d;border:1px solid #333;color:#e0e0e0;font-size:.9rem;border-radius:4px;font-family:inherit}
+    .card input:focus,.card textarea:focus{outline:none;border-color:#FFD700}
+    .card textarea{height:120px;resize:vertical}
+    
+    .btn{padding:10px 24px;border:none;border-radius:4px;font-weight:600;cursor:pointer;font-size:.85rem;text-transform:uppercase;letter-spacing:1px;transition:.2s}
+    .btn-primary{background:#FFD700;color:#0d0d0d}.btn-primary:hover{background:#e6c200}
+    .btn-danger{background:#ef5350;color:#fff}.btn-danger:hover{background:#d32f2f}
+    .btn-outline{background:transparent;border:1px solid #FFD700;color:#FFD700}.btn-outline:hover{background:rgba(255,215,0,.1)}
+    .btn-sm{padding:6px 14px;font-size:.75rem}
+    
+    .actions{display:flex;gap:10px;margin-top:15px}
+    
+    /* Table */
+    .table-wrap{overflow-x:auto}
+    table{width:100%;border-collapse:collapse}
+    th{text-align:left;padding:12px;color:#999;font-size:.75rem;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid #333}
+    td{padding:12px;border-bottom:1px solid #222;font-size:.9rem}
+    td img{width:60px;height:40px;object-fit:cover;border-radius:4px}
+    tr:hover{background:rgba(255,215,0,.03)}
+    
+    /* Status badge */
+    .status{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+    .status-live{background:rgba(76,175,80,.15);color:#4CAF50}
+    .status-upcoming{background:rgba(255,215,0,.15);color:#FFD700}
+    .status-archived{background:rgba(150,150,150,.15);color:#999}
+    
+    .toast{position:fixed;bottom:20px;right:20px;background:#4CAF50;color:#fff;padding:14px 24px;border-radius:6px;font-size:.9rem;z-index:9999;display:none;box-shadow:0 4px 20px rgba(0,0,0,.4)}
+    .toast.show{display:block;animation:slideIn .3s}
+    .toast.error{background:#ef5350}
+    @keyframes slideIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+    
+    .empty{text-align:center;padding:40px;color:#555;font-style:italic}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+    
+    @media(max-width:768px){
+      .sidebar{display:none}
+      .main{margin-left:0;padding:20px}
+      .grid-2{grid-template-columns:1fr}
+    }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+  <!-- LOGIN -->
+  <div class="login-wrap" id="login-wrap">
+    <div class="login-box">
+      <h1>Yankı Kumpanya</h1>
+      <p class="sub">Admin Paneli</p>
+      <input type="password" id="token-input" placeholder="GitHub Personal Access Token" autocomplete="off">
+      <button onclick="login()">Giriş Yap</button>
+      <p class="err" id="login-err">Token geçersiz veya GitHub API hatası</p>
+      <p class="note">GitHub Personal Access Token ile giriş yapın.<br>Token: repo yetkisi gereklidir.<br><code style="color:#FFD700">ghp_...</code> şeklinde başlamalıdır.</p>
+    </div>
+  </div>
+
+  <!-- ADMIN -->
+  <div class="admin" id="admin">
+    <aside class="sidebar">
+      <div class="logo">
+        <h2>YK Admin</h2>
+        <p>Yankı Kumpanya</p>
+      </div>
+      <nav>
+        <a href="#" data-section="dashboard" class="active"><i class="fas fa-home"></i> Dashboard</a>
+        <a href="#" data-section="hero"><i class="fas fa-image"></i> Hero</a>
+        <a href="#" data-section="shows"><i class="fas fa-theater-masks"></i> Oyunlar</a>
+        <a href="#" data-section="gallery"><i class="fas fa-images"></i> Galeri</a>
+        <a href="#" data-section="about"><i class="fas fa-info-circle"></i> Hakkında</a>
+        <a href="#" data-section="contact"><i class="fas fa-envelope"></i> İletişim</a>
+        <a href="#" data-section="footer"><i class="fas fa-shoe-prints"></i> Footer</a>
+        <a href="#" data-section="settings"><i class="fas fa-cog"></i> Ayarlar</a>
+      </nav>
+      <div class="logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Çıkış Yap</div>
+    </aside>
+
+    <div class="main">
+      <!-- DASHBOARD -->
+      <div class="section active" id="sec-dashboard">
+        <div class="topbar"><h1>Dashboard</h1></div>
+        <div class="grid-2">
+          <div class="card"><h3><i class="fas fa-theater-masks" style="color:#FFD700;margin-right:8px"></i> Oyunlar</h3><p style="font-size:2rem;color:#fff" id="stat-shows">0</p><p style="color:#888;font-size:.85rem">Toplam oyun</p></div>
+          <div class="card"><h3><i class="fas fa-images" style="color:#FFD700;margin-right:8px"></i> Galeri</h3><p style="font-size:2rem;color:#fff" id="stat-gallery">0</p><p style="color:#888;font-size:.85rem">Toplam fotoğraf</p></div>
+        </div>
+        <div class="card">
+          <h3>Son Aktivite</h3>
+          <p id="last-activity" style="color:#888">Henüz işlem yapılmadı</p>
+        </div>
+        <div class="card">
+          <h3>Hızlı İşlemler</h3>
+          <div class="actions">
+            <button class="btn btn-primary" onclick="showSection('shows')">+ Yeni Oyun</button>
+            <button class="btn btn-outline" onclick="showSection('gallery')">+ Galeri Ekle</button>
+            <a href="../index.html" target="_blank" class="btn btn-outline"><i class="fas fa-external-link-alt"></i> Siteyi Görüntüle</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- HERO -->
+      <div class="section" id="sec-hero">
+        <div class="topbar"><h1>Hero Bölümü</h1></div>
+        <div class="card">
+          <h3>Arka Plan Görseli</h3>
+          <label>Görsel URL</label>
+          <input type="text" id="hero-img" placeholder="https://images.unsplash.com/...">
+          <label>Başlık</label>
+          <input type="text" id="hero-title" placeholder="Yankı Kumpanya">
+          <label>Alt Başlık</label>
+          <input type="text" id="hero-subtitle" placeholder="İstanbul Tiyatrosu">
+          <label>Slogan</label>
+          <input type="text" id="hero-slogan" placeholder="Sahnenin ışığı, ruhun yankısıdır.">
+          <label>Buton Yazısı</label>
+          <input type="text" id="hero-btn" placeholder="Repertuarı Keşfet">
+          <label>Buton Linki</label>
+          <input type="text" id="hero-btn-link" placeholder="repertuar.html">
+          <div class="actions"><button class="btn btn-primary" onclick="saveHero()">Kaydet</button></div>
+        </div>
+      </div>
+
+      <!-- SHOWS -->
+      <div class="section" id="sec-shows">
+        <div class="topbar"><h1>Oyunlar</h1><button class="btn btn-primary" onclick="addShow()">+ Yeni Oyun</button></div>
+        <div class="card" id="show-form" style="display:none">
+          <h3 id="show-form-title">Yeni Oyun</h3>
+          <input type="hidden" id="show-edit-id">
+          <div class="grid-2">
+            <div>
+              <label>Başlık</label>
+              <input type="text" id="show-title" placeholder="Oyun adı">
+              <label>Tarih / Seans</label>
+              <input type="text" id="show-date" placeholder="Her Cuma, 20:30">
+              <label>Açıklama</label>
+              <textarea id="show-desc" placeholder="Oyun açıklaması"></textarea>
+            </div>
+            <div>
+              <label>Görsel URL</label>
+              <input type="text" id="show-img" placeholder="https://images.unsplash.com/...">
+              <label>Rozet</label>
+              <input type="text" id="show-badge" placeholder="Yeni / Popüler / Yakında (boş bırakabilirsiniz)">
+              <label>Durum</label>
+              <select id="show-status"><option value="Sahnede">Sahnede</option><option value="Yakında">Yakında</option><option value="Arşiv">Arşiv</option></select>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn btn-primary" onclick="saveShow()">Kaydet</button>
+            <button class="btn btn-outline" onclick="cancelShow()">İptal</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="table-wrap">
+            <table><thead><tr><th>Görsel</th><th>Başlık</th><th>Tarih</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="shows-tbody"></tbody></table>
+          </div>
+        </div>
+      </div>
+
+      <!-- GALLERY -->
+      <div class="section" id="sec-gallery">
+        <div class="topbar"><h1>Galeri</h1><button class="btn btn-primary" onclick="addGalleryItem()">+ Fotoğraf Ekle</button></div>
+        <div class="card" id="gallery-form" style="display:none">
+          <h3 id="gallery-form-title">Yeni Fotoğraf</h3>
+          <input type="hidden" id="gallery-edit-id">
+          <label>Görsel URL</label>
+          <input type="text" id="gallery-img" placeholder="https://images.unsplash.com/...">
+          <label>Açıklama (isteğe bağlı)</label>
+          <input type="text" id="gallery-caption" placeholder="Fotoğraf açıklaması">
+          <div class="actions">
+            <button class="btn btn-primary" onclick="saveGalleryItem()">Kaydet</button>
+            <button class="btn btn-outline" onclick="cancelGallery()">İptal</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="table-wrap">
+            <table><thead><tr><th>Görsel</th><th>Açıklama</th><th>İşlem</th></tr></thead><tbody id="gallery-tbody"></tbody></table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ABOUT -->
+      <div class="section" id="sec-about">
+        <div class="topbar"><h1>Hakkında Sayfası</h1></div>
+        <div class="card">
+          <h3>Hikaye</h3>
+          <label>Başlık</label>
+          <input type="text" id="about-title" placeholder="Hikayemiz">
+          <label>Paragraf 1</label>
+          <textarea id="about-p1" placeholder="İlk paragraf"></textarea>
+          <label>Paragraf 2</label>
+          <textarea id="about-p2" placeholder="İkinci paragraf"></textarea>
+          <label>Görsel URL</label>
+          <input type="text" id="about-img" placeholder="https://images.unsplash.com/...">
+        </div>
+        <div class="card">
+          <h3>İstatistikler</h3>
+          <div class="grid-2">
+            <div><label>Oyun Sayısı</label><input type="text" id="stat1-val" placeholder="50+"><label>Açıklama</label><input type="text" id="stat1-label" placeholder="Oyun"></div>
+            <div><label>Seyirci Sayısı</label><input type="text" id="stat2-val" placeholder="10K+"><label>Açıklama</label><input type="text" id="stat2-label" placeholder="Seyirci"></div>
+            <div><label>Yıl</label><input type="text" id="stat3-val" placeholder="7"><label>Açıklama</label><input type="text" id="stat3-label" placeholder="Yıl"></div>
+            <div><label>Ödül</label><input type="text" id="stat4-val" placeholder="15+"><label>Açıklama</label><input type="text" id="stat4-label" placeholder="Ödül"></div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Misyon</h3>
+          <textarea id="about-mission" placeholder="Misyonumuz..."></textarea>
+        </div>
+        <div class="card">
+          <h3>Vizyon</h3>
+          <textarea id="about-vision" placeholder="Vizyonumuz..."></textarea>
+        </div>
+        <div class="card">
+          <h3>Ekip Üyeleri</h3>
+          <div id="team-list"></div>
+          <button class="btn btn-outline btn-sm" onclick="addTeamMember()" style="margin-top:10px">+ Üye Ekle</button>
+        </div>
+        <div class="actions"><button class="btn btn-primary" onclick="saveAbout()">Hakkında Kaydet</button></div>
+      </div>
+
+      <!-- CONTACT -->
+      <div class="section" id="sec-contact">
+        <div class="topbar"><h1>İletişim Sayfası</h1></div>
+        <div class="grid-2">
+          <div class="card">
+            <h3>İletişim Bilgileri</h3>
+            <label>Adres</label>
+            <input type="text" id="contact-address" placeholder="Caferağa Mahallesi, Moda Cad.">
+            <label>Telefon</label>
+            <input type="text" id="contact-phone" placeholder="+90 216 123 45 67">
+            <label>E-posta</label>
+            <input type="text" id="contact-email" placeholder="info@yankikumpanya.com">
+            <label>Bilet E-posta</label>
+            <input type="text" id="contact-bilet-email" placeholder="bilet@yankikumpanya.com">
+            <label>Gişe Saatleri</label>
+            <input type="text" id="contact-hours" placeholder="Salı–Cumartesi: 12:00–20:00">
+          </div>
+          <div class="card">
+            <h3>Google Maps</h3>
+            <label>Maps Embed URL</label>
+            <textarea id="contact-map" placeholder="https://www.google.com/maps/embed?pb=..."></textarea>
+            <h3 style="margin-top:20px">Sosyal Medya</h3>
+            <label>Instagram</label>
+            <input type="text" id="social-instagram" placeholder="https://instagram.com/...">
+            <label>Twitter</label>
+            <input type="text" id="social-twitter" placeholder="https://twitter.com/...">
+            <label>YouTube</label>
+            <input type="text" id="social-youtube" placeholder="https://youtube.com/...">
+            <label>Facebook</label>
+            <input type="text" id="social-facebook" placeholder="https://facebook.com/...">
+            <label>TikTok</label>
+            <input type="text" id="social-tiktok" placeholder="https://tiktok.com/...">
+          </div>
+        </div>
+        <div class="actions"><button class="btn btn-primary" onclick="saveContact()">İletişim Kaydet</button></div>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="section" id="sec-footer">
+        <div class="topbar"><h1>Footer</h1></div>
+        <div class="card">
+          <h3>Footer İçeriği</h3>
+          <label>Telif Hakkı Yazısı</label>
+          <input type="text" id="footer-copy" placeholder="2026 Yankı Kumpanya. Tüm hakları saklıdır.">
+          <label>Bülten Başlığı</label>
+          <input type="text" id="footer-newsletter-title" placeholder="Bülten">
+          <label>Bülten Açıklaması</label>
+          <input type="text" id="footer-newsletter-desc" placeholder="Yeni oyunlar ve etkinliklerden haberdar olun.">
+        </div>
+        <div class="actions"><button class="btn btn-primary" onclick="saveFooter()">Footer Kaydet</button></div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div class="section" id="sec-settings">
+        <div class="topbar"><h1>Ayarlar</h1></div>
+        <div class="card">
+          <h3>GitHub Ayarları</h3>
+          <label>Repo</label>
+          <input type="text" id="set-repo" value="cnytysldr/Yanki-Kumpanya" disabled style="opacity:.6">
+          <label>Branch</label>
+          <input type="text" id="set-branch" value="main" disabled style="opacity:.6">
+          <label>Token</label>
+          <input type="password" id="set-token" disabled style="opacity:.6" value="••••••••">
+        </div>
+        <div class="card">
+          <h3>Veri Yedekleme</h3>
+          <p style="color:#888;margin-bottom:15px">Tüm site verilerini GitHub'a kaydeder.</p>
+          <button class="btn btn-primary" onclick="saveAllData()"><i class="fas fa-save"></i> Tüm Verileri Kaydet</button>
+          <button class="btn btn-outline" onclick="loadAllData()" style="margin-left:10px"><i class="fas fa-sync"></i> Verileri Yenile</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ─── Config ───
+    const REPO = 'cnytysldr/Yanki-Kumpanya';
+    const BRANCH = 'main';
+    let TOKEN = localStorage.getItem('yk_token') || '';
+    let DATA = { hero: {}, shows: [], gallery: [], about: {}, contact: {}, footer: {} };
+
+    // ─── Auth ───
+    async function login() {
+      const input = document.getElementById('token-input').value.trim();
+      if (!input) return;
+      try {
+        const r = await fetch('https://api.github.com/user', { headers: { Authorization: `Bearer ${input}` } });
+        if (!r.ok) throw new Error();
+        TOKEN = input;
+        localStorage.setItem('yk_token', TOKEN);
+        showAdmin();
+      } catch(e) {
+        document.getElementById('login-err').style.display = 'block';
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('yk_token');
+      TOKEN = '';
+      location.reload();
+    }
+
+    // ─── Init ───
+    if (TOKEN) showAdmin();
+
+    async function showAdmin() {
+      document.getElementById('login-wrap').style.display = 'none';
+      document.getElementById('admin').classList.add('active');
+      await loadAllData();
+      renderAll();
+    }
+
+    // ─── GitHub API ───
+    async function ghGet(path) {
+      const r = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}?ref=${BRANCH}`, {
+        headers: { Authorization: `Bearer ${TOKEN}`, Accept: 'application/vnd.github.v3+json' }
+      });
+      if (!r.ok) return null;
+      const json = await r.json();
+      return { content: atob(json.content), sha: json.sha };
+    }
+
+    async function ghPut(path, content, sha) {
+      const body = { message: `Admin: update ${path}`, content: btoa(unescape(encodeURIComponent(content))), branch: BRANCH };
+      if (sha) body.sha = sha;
+      const r = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`, {
+        method: 'PUT',
+        headers: { Authorization: `Bearer ${TOKEN}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      return r.ok;
+    }
+
+    // ─── Data Load/Save ───
+    async function loadFile(path) {
+      const file = await ghGet(path);
+      if (!file) return null;
+      try { return JSON.parse(file.content); } catch { return file.content; }
+    }
+
+    async function saveFile(path, data) {
+      const file = await ghGet(path);
+      const content = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
+      return await ghPut(path, content, file?.sha);
+    }
+
+    async function loadAllData() {
+      showToast('Veriler yükleniyor...');
+      DATA.hero = await loadFile('data/hero.json') || {};
+      DATA.shows = await loadFile('data/shows.json') || [];
+      DATA.gallery = await loadFile('data/gallery.json') || [];
+      DATA.about = await loadFile('data/about.json') || {};
+      DATA.contact = await loadFile('data/contact.json') || {};
+      DATA.footer = await loadFile('data/footer.json') || {};
+      showToast('Veriler yüklendi');
+      renderAll();
+    }
+
+    async function saveAllData() {
+      showToast('Tüm veriler kaydediliyor...');
+      await Promise.all([
+        saveFile('data/hero.json', DATA.hero),
+        saveFile('data/shows.json', DATA.shows),
+        saveFile('data/gallery.json', DATA.gallery),
+        saveFile('data/about.json', DATA.about),
+        saveFile('data/contact.json', DATA.contact),
+        saveFile('data/footer.json', DATA.footer)
+      ]);
+      setActivity('Tüm veriler kaydedildi');
+      showToast('Tüm veriler kaydedildi!');
+    }
+
+    // ─── Render ───
+    function renderAll() {
+      // Dashboard stats
+      document.getElementById('stat-shows').textContent = DATA.shows.length;
+      document.getElementById('stat-gallery').textContent = DATA.gallery.length;
+      
+      // Hero
+      const h = DATA.hero;
+      document.getElementById('hero-img').value = h.image || '';
+      document.getElementById('hero-title').value = h.title || 'Yankı Kumpanya';
+      document.getElementById('hero-subtitle').value = h.subtitle || 'İstanbul Tiyatrosu';
+      document.getElementById('hero-slogan').value = h.slogan || '';
+      document.getElementById('hero-btn').value = h.btnText || 'Repertuarı Keşfet';
+      document.getElementById('hero-btn-link').value = h.btnLink || 'repertuar.html';
+
+      // Shows
+      renderShowsTable();
+
+      // Gallery
+      renderGalleryTable();
+
+      // About
+      const a = DATA.about;
+      document.getElementById('about-title').value = a.title || '';
+      document.getElementById('about-p1').value = a.p1 || '';
+      document.getElementById('about-p2').value = a.p2 || '';
+      document.getElementById('about-img').value = a.image || '';
+      document.getElementById('about-mission').value = a.mission || '';
+      document.getElementById('about-vision').value = a.vision || '';
+      if (a.stats) {
+        for (let i = 0; i < 4; i++) {
+          const s = a.stats[i] || {};
+          document.getElementById(`stat${i+1}-val`).value = s.value || '';
+          document.getElementById(`stat${i+1}-label`).value = s.label || '';
+        }
+      }
+      renderTeam();
+
+      // Contact
+      const c = DATA.contact;
+      document.getElementById('contact-address').value = c.address || '';
+      document.getElementById('contact-phone').value = c.phone || '';
+      document.getElementById('contact-email').value = c.email || '';
+      document.getElementById('contact-bilet-email').value = c.biletEmail || '';
+      document.getElementById('contact-hours').value = c.hours || '';
+      document.getElementById('contact-map').value = c.mapEmbed || '';
+      if (c.social) {
+        document.getElementById('social-instagram').value = c.social.instagram || '';
+        document.getElementById('social-twitter').value = c.social.twitter || '';
+        document.getElementById('social-youtube').value = c.social.youtube || '';
+        document.getElementById('social-facebook').value = c.social.facebook || '';
+        document.getElementById('social-tiktok').value = c.social.tiktok || '';
+      }
+
+      // Footer
+      const f = DATA.footer;
+      document.getElementById('footer-copy').value = f.copyright || '';
+      document.getElementById('footer-newsletter-title').value = f.newsletterTitle || '';
+      document.getElementById('footer-newsletter-desc').value = f.newsletterDesc || '';
+    }
+
+    function renderShowsTable() {
+      const tbody = document.getElementById('shows-tbody');
+      if (!DATA.shows.length) { tbody.innerHTML = '<tr><td colspan="5" class="empty">Henüz oyun eklenmedi</td></tr>'; return; }
+      tbody.innerHTML = DATA.shows.map((s, i) => `
+        <tr>
+          <td><img src="${s.img || ''}" alt="${s.title}"></td>
+          <td>${s.title}</td>
+          <td>${s.date}</td>
+          <td><span class="status ${s.status==='Sahnede'?'status-live':s.status==='Yakında'?'status-upcoming':'status-archived'}">${s.status}</span></td>
+          <td>
+            <button class="btn btn-outline btn-sm" onclick="editShow(${i})"><i class="fas fa-edit"></i></button>
+            <button class="btn btn-danger btn-sm" onclick="deleteShow(${i})"><i class="fas fa-trash"></i></button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderGalleryTable() {
+      const tbody = document.getElementById('gallery-tbody');
+      if (!DATA.gallery.length) { tbody.innerHTML = '<tr><td colspan="3" class="empty">Henüz fotoğraf eklenmedi</td></tr>'; return; }
+      tbody.innerHTML = DATA.gallery.map((g, i) => `
+        <tr>
+          <td><img src="${g.img || g}" alt="Galeri"></td>
+          <td>${g.caption || ''}</td>
+          <td>
+            <button class="btn btn-outline btn-sm" onclick="editGallery(${i})"><i class="fas fa-edit"></i></button>
+            <button class="btn btn-danger btn-sm" onclick="deleteGallery(${i})"><i class="fas fa-trash"></i></button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderTeam() {
+      const list = document.getElementById('team-list');
+      const team = DATA.about.team || [];
+      if (!team.length) { list.innerHTML = '<p class="empty">Üye eklenmedi</p>'; return; }
+      list.innerHTML = team.map((m, i) => `
+        <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px;padding:10px;background:#0d0d0d;border-radius:4px">
+          <img src="${m.img || ''}" style="width:50px;height:50px;border-radius:50%;object-fit:cover">
+          <div style="flex:1"><strong>${m.name}</strong><br><span style="color:#888;font-size:.85rem">${m.role}</span></div>
+          <button class="btn btn-danger btn-sm" onclick="removeTeam(${i})"><i class="fas fa-trash"></i></button>
+        </div>
+      `).join('');
+    }
+
+    // ─── Section Navigation ───
+    document.querySelectorAll('.sidebar nav a').forEach(a => {
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        showSection(a.dataset.section);
+      });
+    });
+
+    function showSection(name) {
+      document.querySelectorAll('.sidebar nav a').forEach(a => a.classList.remove('active'));
+      document.querySelector(`.sidebar nav a[data-section="${name}"]`)?.classList.add('active');
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById(`sec-${name}`)?.classList.add('active');
+    }
+
+    // ─── Hero ───
+    async function saveHero() {
+      DATA.hero = {
+        image: document.getElementById('hero-img').value,
+        title: document.getElementById('hero-title').value,
+        subtitle: document.getElementById('hero-subtitle').value,
+        slogan: document.getElementById('hero-slogan').value,
+        btnText: document.getElementById('hero-btn').value,
+        btnLink: document.getElementById('hero-btn-link').value
+      };
+      await saveFile('data/hero.json', DATA.hero);
+      setActivity('Hero güncellendi');
+      showToast('Hero kaydedildi!');
+    }
+
+    // ─── Shows ───
+    function addShow() {
+      document.getElementById('show-form').style.display = 'block';
+      document.getElementById('show-form-title').textContent = 'Yeni Oyun';
+      document.getElementById('show-edit-id').value = '';
+      ['show-title','show-date','show-desc','show-img','show-badge'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('show-status').value = 'Sahnede';
+    }
+    function editShow(i) {
+      const s = DATA.shows[i];
+      document.getElementById('show-form').style.display = 'block';
+      document.getElementById('show-form-title').textContent = 'Oyunu Düzenle';
+      document.getElementById('show-edit-id').value = i;
+      document.getElementById('show-title').value = s.title || '';
+      document.getElementById('show-date').value = s.date || '';
+      document.getElementById('show-desc').value = s.desc || '';
+      document.getElementById('show-img').value = s.img || '';
+      document.getElementById('show-badge').value = s.badge || '';
+      document.getElementById('show-status').value = s.status || 'Sahnede';
+    }
+    function cancelShow() { document.getElementById('show-form').style.display = 'none'; }
+    async function saveShow() {
+      const obj = {
+        title: document.getElementById('show-title').value,
+        date: document.getElementById('show-date').value,
+        desc: document.getElementById('show-desc').value,
+        img: document.getElementById('show-img').value,
+        badge: document.getElementById('show-badge').value,
+        status: document.getElementById('show-status').value
+      };
+      const editId = document.getElementById('show-edit-id').value;
+      if (editId !== '') { DATA.shows[parseInt(editId)] = obj; } else { DATA.shows.push(obj); }
+      await saveFile('data/shows.json', DATA.shows);
+      document.getElementById('show-form').style.display = 'none';
+      renderShowsTable();
+      setActivity(`Oyun "${obj.title}" kaydedildi`);
+      showToast('Oyun kaydedildi!');
+    }
+    async function deleteShow(i) {
+      if (!confirm('Bu oyunu silmek istediğinize emin misiniz?')) return;
+      const title = DATA.shows[i].title;
+      DATA.shows.splice(i, 1);
+      await saveFile('data/shows.json', DATA.shows);
+      renderShowsTable();
+      setActivity(`Oyun "${title}" silindi`);
+      showToast('Oyun silindi!');
+    }
+
+    // ─── Gallery ───
+    function addGalleryItem() {
+      document.getElementById('gallery-form').style.display = 'block';
+      document.getElementById('gallery-form-title').textContent = 'Yeni Fotoğraf';
+      document.getElementById('gallery-edit-id').value = '';
+      document.getElementById('gallery-img').value = '';
+      document.getElementById('gallery-caption').value = '';
+    }
+    function editGallery(i) {
+      const g = DATA.gallery[i];
+      document.getElementById('gallery-form').style.display = 'block';
+      document.getElementById('gallery-form-title').textContent = 'Fotoğrafı Düzenle';
+      document.getElementById('gallery-edit-id').value = i;
+      document.getElementById('gallery-img').value = typeof g === 'string' ? g : g.img || '';
+      document.getElementById('gallery-caption').value = typeof g === 'string' ? '' : g.caption || '';
+    }
+    function cancelGallery() { document.getElementById('gallery-form').style.display = 'none'; }
+    async function saveGalleryItem() {
+      const obj = { img: document.getElementById('gallery-img').value, caption: document.getElementById('gallery-caption').value };
+      const editId = document.getElementById('gallery-edit-id').value;
+      if (editId !== '') { DATA.gallery[parseInt(editId)] = obj; } else { DATA.gallery.push(obj); }
+      await saveFile('data/gallery.json', DATA.gallery);
+      document.getElementById('gallery-form').style.display = 'none';
+      renderGalleryTable();
+      setActivity('Galeri güncellendi');
+      showToast('Fotoğraf kaydedildi!');
+    }
+    async function deleteGallery(i) {
+      if (!confirm('Bu fotoğrafı silmek istediğinize emin misiniz?')) return;
+      DATA.gallery.splice(i, 1);
+      await saveFile('data/gallery.json', DATA.gallery);
+      renderGalleryTable();
+      setActivity('Fotoğraf silindi');
+      showToast('Fotoğraf silindi!');
+    }
+
+    // ─── About ───
+    async function saveAbout() {
+      DATA.about = {
+        title: document.getElementById('about-title').value,
+        p1: document.getElementById('about-p1').value,
+        p2: document.getElementById('about-p2').value,
+        image: document.getElementById('about-img').value,
+        mission: document.getElementById('about-mission').value,
+        vision: document.getElementById('about-vision').value,
+        stats: [
+          { value: document.getElementById('stat1-val').value, label: document.getElementById('stat1-label').value },
+          { value: document.getElementById('stat2-val').value, label: document.getElementById('stat2-label').value },
+          { value: document.getElementById('stat3-val').value, label: document.getElementById('stat3-label').value },
+          { value: document.getElementById('stat4-val').value, label: document.getElementById('stat4-label').value }
+        ],
+        team: DATA.about.team || []
+      };
+      await saveFile('data/about.json', DATA.about);
+      setActivity('Hakkında sayfası güncellendi');
+      showToast('Hakkında kaydedildi!');
+    }
+
+    function addTeamMember() {
+      const name = prompt('İsim:');
+      if (!name) return;
+      const role = prompt('Pozisyon:') || '';
+      const img = prompt('Fotoğraf URL:') || '';
+      if (!DATA.about.team) DATA.about.team = [];
+      DATA.about.team.push({ name, role, img });
+      renderTeam();
+    }
+    function removeTeam(i) {
+      if (!confirm('Bu üyeyi silmek istediğinize emin misiniz?')) return;
+      DATA.about.team.splice(i, 1);
+      renderTeam();
+    }
+
+    // ─── Contact ───
+    async function saveContact() {
+      DATA.contact = {
+        address: document.getElementById('contact-address').value,
+        phone: document.getElementById('contact-phone').value,
+        email: document.getElementById('contact-email').value,
+        biletEmail: document.getElementById('contact-bilet-email').value,
+        hours: document.getElementById('contact-hours').value,
+        mapEmbed: document.getElementById('contact-map').value,
+        social: {
+          instagram: document.getElementById('social-instagram').value,
+          twitter: document.getElementById('social-twitter').value,
+          youtube: document.getElementById('social-youtube').value,
+          facebook: document.getElementById('social-facebook').value,
+          tiktok: document.getElementById('social-tiktok').value
+        }
+      };
+      await saveFile('data/contact.json', DATA.contact);
+      setActivity('İletişim sayfası güncellendi');
+      showToast('İletişim kaydedildi!');
+    }
+
+    // ─── Footer ───
+    async function saveFooter() {
+      DATA.footer = {
+        copyright: document.getElementById('footer-copy').value,
+        newsletterTitle: document.getElementById('footer-newsletter-title').value,
+        newsletterDesc: document.getElementById('footer-newsletter-desc').value
+      };
+      await saveFile('data/footer.json', DATA.footer);
+      setActivity('Footer güncellendi');
+      showToast('Footer kaydedildi!');
+    }
+
+    // ─── Utils ───
+    function showToast(msg, isError) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = 'toast show' + (isError ? ' error' : '');
+      setTimeout(() => t.className = 'toast', 3000);
+    }
+    function setActivity(msg) {
+      document.getElementById('last-activity').textContent = new Date().toLocaleString('tr-TR') + ' – ' + msg;
+    }
+  </script>
+</body>
+</html>

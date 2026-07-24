@@ -1,0 +1,20 @@
+{
+  "title": "Hikayemiz",
+  "p1": "Yankı Kumpanya, 2018 yılında İstanbul'un Kadıköy ilçesinde bir grup genç tiyatrocu tarafından kuruldu. Kurulduğu günden bu yana, bağımsız tiyatronun sesini daha geniş kitlelere ulaştırmayı hedefliyor.",
+  "p2": "Amacımız, seyirciyi sadece eğlendirmek değil, aynı zamanda düşündürmek ve hissettirmektir. Her oyunumuzda farklı bir hikaye, farklı bir dünya sunuyoruz.",
+  "image": "https://images.unsplash.com/photo-1580809361436-42a7ec204889?w=800&q=80",
+  "stats": [
+    {"value": "50+", "label": "Oyun"},
+    {"value": "10K+", "label": "Seyirci"},
+    {"value": "7", "label": "Yıl"},
+    {"value": "15+", "label": "Ödül"}
+  ],
+  "mission": "Toplumun kültürel gelişimine katkıda bulunmak, tiyatro sanatını herkes için erişilebilir kılmak ve gelecek nesil tiyatroculara ilham vermektir.",
+  "vision": "Türkiye'nin önde gelen bağımsız tiyatro topluluklarından biri olarak, uluslararası festivallerde temsil edilen, yenilikçi ve sürdürülebilir bir sanat markası olmak.",
+  "team": [
+    {"name": "Ahmet Yılmaz", "role": "Genel Sanat Yönetmeni", "img": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&q=80"},
+    {"name": "Elif Demir", "role": "Baş Oyuncu", "img": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&q=80"},
+    {"name": "Can Özkan", "role": "Oyuncu & Yazar", "img": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&q=80"},
+    {"name": "Zeynep Kaya", "role": "Oyuncu & Eğitmen", "img": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&q=80"}
+  ]
+}

@@ -1,0 +1,27 @@
+plugins = []
+headers = []
+redirects = []
+
+[functions]
+
+[functions."*"]
+
+[build]
+publish = "C:\\Users\\CÜNEYT\\Documents\\Default Project\\yanki-kumpanya\\_site"
+publishOrigin = "ui"
+commandOrigin = "ui"
+command = "cecil build"
+
+[build.environment]
+
+[build.processing]
+
+[build.processing.css]
+
+[build.processing.html]
+
+[build.processing.images]
+
+[build.processing.js]
+
+[build.services]
