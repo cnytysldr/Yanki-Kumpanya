@@ -1,8 +1,26 @@
 [
-  {"img": "https://images.unsplash.com/photo-1580809361436-42a7ec204889?w=800&q=80", "caption": "Sahne Performansı"},
-  {"img": "https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?w=800&q=80", "caption": "Kayıp Geceler"},
-  {"img": "https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?w=800&q=80", "caption": "Sahne Arkası"},
-  {"img": "https://images.unsplash.com/photo-1514306191717-452ec28c7814?w=800&q=80", "caption": "Prova"},
-  {"img": "https://images.unsplash.com/photo-1460723237483-7a6dc9d0b212?w=800&q=80", "caption": "Seyirci"},
-  {"img": "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800&q=80", "caption": "Sahne Işığı"}
+  {
+    "img": "https://images.unsplash.com/photo-1580809361436-42a7ec204889?w=800&q=80",
+    "caption": "gfdghfhgf"
+  },
+  {
+    "img": "https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?w=800&q=80",
+    "caption": "KayÄ±p Geceler"
+  },
+  {
+    "img": "https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?w=800&q=80",
+    "caption": "Sahne ArkasÄ±"
+  },
+  {
+    "img": "https://images.unsplash.com/photo-1514306191717-452ec28c7814?w=800&q=80",
+    "caption": "Prova"
+  },
+  {
+    "img": "https://images.unsplash.com/photo-1460723237483-7a6dc9d0b212?w=800&q=80",
+    "caption": "Seyirci"
+  },
+  {
+    "img": "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800&q=80",
+    "caption": "Sahne IÅÄ±ÄÄ±"
+  }
 ]
