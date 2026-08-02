@@ -42,18 +42,27 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ---------- Fade-in on scroll ---------- */
-  const fadeEls = document.querySelectorAll('.fade-in');
-  if (fadeEls.length) {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('visible');
-          observer.unobserve(e.target);
+  const fadeObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        fadeObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.fade-in').forEach(el => fadeObserver.observe(el));
+
+  new MutationObserver((mutations) => {
+    mutations.forEach(m => {
+      m.addedNodes.forEach(n => {
+        if (n.nodeType === 1) {
+          if (n.classList.contains('fade-in')) fadeObserver.observe(n);
+          n.querySelectorAll('.fade-in').forEach(el => fadeObserver.observe(el));
         }
       });
-    }, { threshold: 0.15 });
-    fadeEls.forEach(el => observer.observe(el));
-  }
+    });
+  }).observe(document.body, { childList: true, subtree: true });
 
   /* ---------- Active nav link ---------- */
   const currentPage = location.pathname.split('/').pop() || 'index.html';
@@ -74,12 +83,14 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentIndex = 0;
 
   if (lightbox) {
-    document.querySelectorAll('.gallery-item').forEach((item, i) => {
-      item.addEventListener('click', () => {
-        galleryImages = Array.from(document.querySelectorAll('.gallery-item img')).map(img => img.src);
-        currentIndex = i;
-        openLightbox(galleryImages[currentIndex]);
-      });
+    document.addEventListener('click', (e) => {
+      const item = e.target.closest('.gallery-item');
+      if (item) {
+        const allItems = Array.from(document.querySelectorAll('.gallery-item'));
+        galleryImages = allItems.map(el => el.querySelector('img').src);
+        currentIndex = allItems.indexOf(item);
+        if (currentIndex !== -1) openLightbox(galleryImages[currentIndex]);
+      }
     });
 
     closeBtnLb?.addEventListener('click', () => lightbox.classList.remove('active'));

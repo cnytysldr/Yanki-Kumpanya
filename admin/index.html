@@ -383,7 +383,13 @@
       });
       if (!r.ok) return null;
       const json = await r.json();
-      return { content: atob(json.content), sha: json.sha };
+      let decodedContent = '';
+      try {
+        decodedContent = decodeURIComponent(escape(atob(json.content)));
+      } catch(e) {
+        decodedContent = atob(json.content);
+      }
+      return { content: decodedContent, sha: json.sha };
     }
 
     async function ghPut(path, content, sha) {
@@ -407,6 +413,10 @@
     async function saveFile(path, data) {
       const file = await ghGet(path);
       const content = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
+      try {
+        const localKey = 'yk_' + path.replace('/', '_').replace('.json', '');
+        localStorage.setItem(localKey, content);
+      } catch (e) {}
       return await ghPut(path, content, file?.sha);
     }
 
@@ -424,7 +434,7 @@
 
     async function saveAllData() {
       showToast('Tüm veriler kaydediliyor...');
-      await Promise.all([
+      const results = await Promise.all([
         saveFile('data/hero.json', DATA.hero),
         saveFile('data/shows.json', DATA.shows),
         saveFile('data/gallery.json', DATA.gallery),
@@ -432,6 +442,7 @@
         saveFile('data/contact.json', DATA.contact),
         saveFile('data/footer.json', DATA.footer)
       ]);
+      if (results.some(r => !r)) return showToast('Bazı veriler kaydedilemedi!', true);
       setActivity('Tüm veriler kaydedildi');
       showToast('Tüm veriler kaydedildi!');
     }
@@ -567,7 +578,7 @@
         btnText: document.getElementById('hero-btn').value,
         btnLink: document.getElementById('hero-btn-link').value
       };
-      await saveFile('data/hero.json', DATA.hero);
+      if (!(await saveFile('data/hero.json', DATA.hero))) return showToast('Kaydedilemedi!', true);
       setActivity('Hero güncellendi');
       showToast('Hero kaydedildi!');
     }
@@ -604,7 +615,7 @@
       };
       const editId = document.getElementById('show-edit-id').value;
       if (editId !== '') { DATA.shows[parseInt(editId)] = obj; } else { DATA.shows.push(obj); }
-      await saveFile('data/shows.json', DATA.shows);
+      if (!(await saveFile('data/shows.json', DATA.shows))) return showToast('Kaydedilemedi!', true);
       document.getElementById('show-form').style.display = 'none';
       renderShowsTable();
       setActivity(`Oyun "${obj.title}" kaydedildi`);
@@ -614,7 +625,7 @@
       if (!confirm('Bu oyunu silmek istediğinize emin misiniz?')) return;
       const title = DATA.shows[i].title;
       DATA.shows.splice(i, 1);
-      await saveFile('data/shows.json', DATA.shows);
+      if (!(await saveFile('data/shows.json', DATA.shows))) return showToast('Silinemedi!', true);
       renderShowsTable();
       setActivity(`Oyun "${title}" silindi`);
       showToast('Oyun silindi!');
@@ -641,7 +652,7 @@
       const obj = { img: document.getElementById('gallery-img').value, caption: document.getElementById('gallery-caption').value };
       const editId = document.getElementById('gallery-edit-id').value;
       if (editId !== '') { DATA.gallery[parseInt(editId)] = obj; } else { DATA.gallery.push(obj); }
-      await saveFile('data/gallery.json', DATA.gallery);
+      if (!(await saveFile('data/gallery.json', DATA.gallery))) return showToast('Kaydedilemedi!', true);
       document.getElementById('gallery-form').style.display = 'none';
       renderGalleryTable();
       setActivity('Galeri güncellendi');
@@ -650,7 +661,7 @@
     async function deleteGallery(i) {
       if (!confirm('Bu fotoğrafı silmek istediğinize emin misiniz?')) return;
       DATA.gallery.splice(i, 1);
-      await saveFile('data/gallery.json', DATA.gallery);
+      if (!(await saveFile('data/gallery.json', DATA.gallery))) return showToast('Silinemedi!', true);
       renderGalleryTable();
       setActivity('Fotoğraf silindi');
       showToast('Fotoğraf silindi!');
@@ -673,7 +684,7 @@
         ],
         team: DATA.about.team || []
       };
-      await saveFile('data/about.json', DATA.about);
+      if (!(await saveFile('data/about.json', DATA.about))) return showToast('Kaydedilemedi!', true);
       setActivity('Hakkında sayfası güncellendi');
       showToast('Hakkında kaydedildi!');
     }
@@ -710,7 +721,7 @@
           tiktok: document.getElementById('social-tiktok').value
         }
       };
-      await saveFile('data/contact.json', DATA.contact);
+      if (!(await saveFile('data/contact.json', DATA.contact))) return showToast('Kaydedilemedi!', true);
       setActivity('İletişim sayfası güncellendi');
       showToast('İletişim kaydedildi!');
     }
@@ -722,7 +733,7 @@
         newsletterTitle: document.getElementById('footer-newsletter-title').value,
         newsletterDesc: document.getElementById('footer-newsletter-desc').value
       };
-      await saveFile('data/footer.json', DATA.footer);
+      if (!(await saveFile('data/footer.json', DATA.footer))) return showToast('Kaydedilemedi!', true);
       setActivity('Footer güncellendi');
       showToast('Footer kaydedildi!');
     }
