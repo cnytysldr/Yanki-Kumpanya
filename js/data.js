@@ -59,7 +59,7 @@ async function loadDynamicFooter() {
       <div class="footer-grid">
         <div>
           <div class="logo-footer">Yankı Kumpanya</div>
-          <p>İstanbul'un bağımsız tiyatro topluluğu. 2018'den beri sahnede.</p>
+          <p>Muğla'nın bağımsız tiyatro topluluğu. 2018'den beri sahnede.</p>
           <div class="social-row">
             ${contact.social?.instagram ? `<a href="${contact.social.instagram}"><i class="fab fa-instagram"></i></a>` : ''}
             ${contact.social?.twitter ? `<a href="${contact.social.twitter}"><i class="fab fa-twitter"></i></a>` : ''}
